@@ -1,0 +1,376 @@
+#that moving moving image
+<!DOCTYPE html>
+<html>
+<head>
+<script src="aframe.min.js"></script>
+
+<script>
+AFRAME.registerComponent('change', {
+  schema:{t:{type:'string'}},
+  init(){
+    this.el.onclick=()=>document.querySelector('#sky')
+      .setAttribute('src',this.data.t);
+  }
+});
+</script>
+</head>
+
+<body>
+<a-scene>
+
+<a-assets>
+  <img id="i1" src="images/img 1.jpg">
+  <img id="i2" src="images/img 2.jpg">
+  <img id="i3" src="images/img 3.webp">
+</a-assets>
+
+<a-camera cursor="rayOrigin:mouse"></a-camera>
+
+<a-sky id="sky" src="#i1"></a-sky>
+
+<!-- Hotspots -->
+<a-circle class="clickable" position="-2 1 -3" radius="0.15" color="red" change="t:#i1"></a-circle>
+<a-circle class="clickable" position="0 1 -3" radius="0.15" color="blue" change="t:#i2"></a-circle>
+<a-circle class="clickable" position="2 1 -3" radius="0.15" color="green" change="t:#i3"></a-circle>
+
+</a-scene>
+</body>
+</html>
+
+#lab4 
+<html>
+<head>
+<script src="aframe.min.js"></script>
+</head>
+
+<body>
+<a-scene>
+
+<a-sky color="#6a85b6"></a-sky>
+
+<a-camera position="0 1.6 4"></a-camera>
+
+<!-- Shapes -->
+<a-box position="-1 1 -3" color="pink"
+  animation="property: rotation; to: 0 360 0; loop:true">
+</a-box>
+
+<a-triangle position="1 1 -3" color="cyan"></a-triangle>
+
+<a-sphere position="0 1 -3" color="purple"></a-sphere>
+
+<a-plane position="0 0 -4" rotation="-90 0 0" width="10" height="10"></a-plane>
+
+</a-scene>
+</body>
+</html>
+
+#lab5
+<!DOCTYPE html>
+<html>
+<head>
+<script src="aframe.min.js"></script>
+
+<script>
+// Hover color
+AFRAME.registerComponent('hover', {
+  init(){
+    this.el.onmouseenter=()=>this.el.setAttribute('color','blue');
+    this.el.onmouseleave=()=>this.el.setAttribute('color','red');
+  }
+});
+
+// Click scale
+AFRAME.registerComponent('scale', {
+  init(){
+    let s=false;
+    this.el.onclick=()=>{
+      this.el.setAttribute('scale',s?'1 1 1':'2 2 2');
+      s=!s;
+    };
+  }
+});
+</script>
+</head>
+
+<body>
+<a-scene>
+
+<a-camera position="0 1.6 4" cursor="rayOrigin:mouse"></a-camera>
+
+<!-- Shapes -->
+<a-box position="-1 1 -3" color="red" hover scale></a-box>
+
+<a-cylinder position="1 1 -3" color="green"></a-cylinder>
+
+<a-plane position="0 0 -4" rotation="-90 0 0" width="10" height="10"></a-plane>
+
+</a-scene>
+</body>
+</html>
+
+#lab 8
+<!DOCTYPE html>
+<html>
+<head>
+<script src="aframe.min.js"></script>
+<script src="aframe-ar.js"></script>
+</head>
+
+<body>
+<a-scene embedded arjs>
+
+<a-marker type="pattern" url="pattern-letterA.patt">
+
+  <a-box color="red"></a-box>
+  <a-cylinder position="1 0 0" color="green"></a-cylinder>
+
+</a-marker>
+
+<a-camera></a-camera>
+
+</a-scene>
+</body>
+</html>
+
+#lab 9
+<!DOCTYPE html>
+<html>
+<head>
+<script src="aframe.min.js"></script>
+<script src="mindar-image-aframe.prod.js"></script>
+</head>
+
+<body>
+<a-scene mindar-image="imageTargetSrc: targets.mind">
+
+<a-camera></a-camera>
+
+<a-entity mindar-image-target="targetIndex:0">
+  <a-gltf-model src="Trident.glb" scale="0.3"></a-gltf-model>
+</a-entity>
+
+</a-scene>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
+</head>
+
+<body>
+<a-scene mindar-image="imageTargetSrc: targets.mind">
+
+<a-camera></a-camera>
+
+<a-entity mindar-image-target="targetIndex:0">
+  <a-box color="red"></a-box>
+</a-entity>
+
+</a-scene>
+</body>
+</html>
+
+#lab 12
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+</head>
+
+<body>
+
+<a-scene>
+
+<a-assets>
+  <a-asset-item id="m" src="model/Fantasy House.glb"></a-asset-item>
+</a-assets>
+
+<a-camera position="0 1.6 3"></a-camera>
+
+<a-entity id="box"
+  gltf-model="#m"
+  position="0 0 -3"
+  scale="1.5">
+</a-entity>
+
+</a-scene>
+
+<!-- BUTTON (visible now) -->
+<button onclick="rot()" style="position:absolute; top:10px; z-index:10;">
+Rotate
+</button>
+<script>
+function rot(){
+  let r = box.getAttribute("rotation");
+  box.setAttribute("rotation",{x:r.x, y:r.y+45, z:r.z});
+}
+</script>
+
+</body>
+</html>
+
+#ai unity
+player.cs 
+
+using UnityEngine;
+
+public class Lab2 : MonoBehaviour
+{
+    public float speed = 5f;
+
+    void Update()
+    {
+        float x = Input.GetAxis("Horizontal"); // A / D
+        float z = Input.GetAxis("Vertical");   // W / S
+
+        Vector3 move = new Vector3(x, 0, z);
+        transform.Translate(move * speed * Time.deltaTime);
+    }
+}
+
+ai.cs
+ using UnityEngine;
+using UnityEngine.AI;
+
+public class Lab3 : MonoBehaviour
+{
+    public Transform player;
+    NavMeshAgent agent;
+
+    void Start()
+    {
+        agent = GetComponent<NavMeshAgent>();
+    }
+
+    void Update()
+    {
+        agent.SetDestination(player.position);
+    }
+}
+
+#light
+using UnityEngine;
+
+public class LightController : MonoBehaviour
+{
+    Light l;
+    Color c;
+    float i;
+
+    void Start()
+    {
+        l = GetComponent<Light>();
+        c = l.color;
+        i = l.intensity;
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1)) { c = Color.yellow; i = 2f; }
+        if (Input.GetKeyDown(KeyCode.Alpha2)) { c = Color.cyan;   i = 4f; }
+        if (Input.GetKeyDown(KeyCode.Alpha3)) { c = Color.green;  i = 1f; }
+
+        l.color = Color.Lerp(l.color, c, Time.deltaTime * 2);
+        l.intensity = Mathf.Lerp(l.intensity, i, Time.deltaTime * 2);
+    }
+}
+
+#lab1 ubituy
+using UnityEngine;
+
+public class Controller : MonoBehaviour
+{
+    public Animator animator;
+    public ParticleSystem fire;
+
+    void Update()
+    {
+        // 🔁 ROTATION / ANIMATION (W key)
+        if (Input.GetKey(KeyCode.W))
+        {
+            animator.SetFloat("Speed", 1);
+        }
+        else
+        {
+            animator.SetFloat("Speed", 0);
+        }
+
+        // ✨ PARTICLE TOGGLE (Space key)
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (fire.isPlaying)
+                fire.Stop();
+            else
+                fire.Play();
+        }
+    }
+}
+
+#lab 2
+using UnityEngine;
+
+public class Lab2 : MonoBehaviour
+{
+    public float speed = 5f;
+
+    void Update()
+    {
+        float moveX = Input.GetAxis("Horizontal"); // A/D
+        float moveZ = Input.GetAxis("Vertical");   // W/S
+
+        Vector3 move = new Vector3(moveX, 0f, moveZ);
+
+        transform.Translate(move * speed * Time.deltaTime);
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            Debug.Log("Obstacle Found!");
+        }
+    }
+}
+
+#lab 7
+<!DOCTYPE html>
+<html>
+<head>
+<script src="aframe.min.js"></script>
+<script src="aframe-ar.js"></script>
+
+<script>
+navigator.geolocation.getCurrentPosition(p=>{
+  let lat=p.coords.latitude, lon=p.coords.longitude;
+
+  let loc=[
+    ["box",12.95,77.62],
+    ["cyl",12.90,77.55],
+    ["sph",12.95,77.59]
+  ];
+
+  loc.forEach(i=>{
+    if(Math.abs(lat-i[1])<0.01 && Math.abs(lon-i[2])<0.01)
+      document.getElementById(i[0]).setAttribute("visible",true);
+  });
+});
+</script>
+</head>
+
+<body>
+
+<a-scene embedded arjs>
+
+<a-box id="box" position="0 1 -3" color="pink" visible="false"></a-box>
+<a-cylinder id="cyl" position="2 1 -3" color="red" visible="false"></a-cylinder>
+<a-sphere id="sph" position="-2 1 -3" color="blue" visible="false"></a-sphere>
+
+<a-camera gps-camera></a-camera>
+
+</a-scene>
+</body>
+</html>
