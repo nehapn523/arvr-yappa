@@ -311,6 +311,42 @@ public class Controller : MonoBehaviour
 }
 
 #lab 2
+LAB 2: Basic Player Movement (Updated Steps)
+🧠 Objective
+
+Create a player (Capsule) that can:
+
+Move forward/back (W/S)
+Move left/right (A/D)
+Detect collision with an obstacle
+🏗️ STEP 1: Create Scene
+Open Unity → New 3D Scene
+In Hierarchy:
+Right click → 3D Object → Plane     (Ground)
+Right click → 3D Object → Capsule   (rename: Player)
+Right click → 3D Object → Cube      (Obstacle)
+🏷️ STEP 2: Add Tag to Obstacle
+Select Cube
+In Inspector → Tag → Add Tag
+Click +
+Create:
+Obstacle
+Go back → Select Cube again → assign:
+Tag = Obstacle
+⚙️ STEP 3: Add Rigidbody to Player
+
+Select Capsule (Player)
+
+Add Component → Rigidbody
+Set:
+Use Gravity ✅
+Freeze Rotation X, Y, Z ✅
+
+👉 Prevents player from falling/tilting
+
+💻 STEP 4: Create Script
+
+Right click in Project → Create → C# Script → Lab2.cs
 using UnityEngine;
 
 public class Lab2 : MonoBehaviour
