@@ -421,3 +421,202 @@ app.use(express.static(__dirname));
 app.listen(3000, () => {
   console.log("Server running at http://localhost:3000");
 });
+
+#Lab 1
+LAB 1: 3D Environment with Animation, Materials & Particle
+🧠 Objective
+
+Create:
+
+3D scene (cube + plane)
+Apply material (color)
+Add animation (rotation/scale)
+Add particle effect
+Control using keyboard
+🏗️ STEP 1: Create Scene
+Open Unity → New 3D Scene
+In Hierarchy:
+Right click → 3D Object → Plane (Ground)
+Right click → 3D Object → Cube  (Object)
+🎨 STEP 2: Apply Material (Color)
+Right click → Create → Material
+Select material → Inspector:
+Shader → URP/Lit
+Base Color → choose color
+Drag material → Cube
+🎬 STEP 3: Create Animation
+Select Cube
+Go to:
+Window → Animation → Animation
+Click:
+Create → save as "Anim1"
+➤ Add Properties
+
+Click:
+
+Add Property → Transform → Rotation
+➤ Add Keyframes
+Frame 0:
+Rotation → (0,0,0)
+Frame 60:
+Rotation → (0,360,0)
+
+👉 Cube will rotate
+
+🔁 STEP 4: Enable Loop
+
+Select animation file → Inspector:
+
+Loop Time ✅
+🎛️ STEP 5: Animator Setup
+Unity auto creates Animator
+Check:
+Entry → Anim1
+
+👉 Animation plays automatically
+
+✨ STEP 6: Add Particle System
+Right click Cube:
+Effects → Particle System
+Drag particle → make it child of Cube
+
+👉 Adjust:
+
+Position (0,1,0)
+
+#lab 4
+🎮 LAB 3: AI Character Following Player
+🧠 Objective
+
+Create:
+
+Player (Capsule)
+AI (Cylinder)
+AI follows player using NavMesh (pathfinding)
+🏗️ STEP 1: Create Scene
+Open Unity → New 3D Scene
+In Hierarchy:
+Right click → 3D Object → Plane (Ground)
+Right click → 3D Object → Capsule → rename: Player
+Right click → 3D Object → Cylinder → rename: AI
+🎮 STEP 2: Add Movement to Player
+
+Create script: Lab2.cs
+
+using UnityEngine;
+
+public class Lab2 : MonoBehaviour
+{
+    public float speed = 5f;
+
+    void Update()
+    {
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
+
+        transform.Translate(x * speed * Time.deltaTime, 0, z * speed * Time.deltaTime);
+    }
+}
+
+👉 Attach to Player (Capsule)
+
+⚠️ STEP 3: Fix Input System
+
+Go to:
+
+Edit → Project Settings → Player
+
+Set:
+
+Active Input Handling → Both
+
+Restart Unity
+
+🟦 STEP 4: Create NavMesh (IMPORTANT)
+Unity 6 method:
+Select Plane
+In Inspector:
+Add Component → NavMesh Surface
+Click:
+Bake
+
+👉 Ground turns BLUE (walkable area)
+
+🤖 STEP 5: Add NavMesh Agent
+
+Select AI (Cylinder)
+
+Add Component → NavMesh Agent
+
+Set:
+
+Speed → 3.5
+Stopping Distance → 1.5
+
+#Lab 2
+🎮 LAB: Light Color & Intensity Control using Script
+🧠 Objective
+
+Create a 3D scene where:
+
+Light color changes
+Light intensity changes
+Controlled using keyboard input
+Smooth transition using code
+🏗️ STEP 1: Create Scene
+Open Unity → New 3D Scene
+In Hierarchy:
+Right click → 3D Object → Plane (Ground)
+Right click → Light → Point Light
+
+👉 You can also use Directional Light
+
+💻 STEP 2: Create Script
+In Project:
+Right click → Create → C# Script
+Name:
+LightController
+✏️ STEP 3: Paste Code
+
+Open script and paste:
+
+using UnityEngine;
+
+public class LightController : MonoBehaviour
+{
+    Light l;
+    Color c;
+    float i;
+
+    void Start()
+    {
+        l = GetComponent<Light>();
+        c = l.color;
+        i = l.intensity;
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1)) { c = Color.yellow; i = 2f; }
+        if (Input.GetKeyDown(KeyCode.Alpha2)) { c = Color.cyan;   i = 4f; }
+        if (Input.GetKeyDown(KeyCode.Alpha3)) { c = Color.green;  i = 1f; }
+
+        l.color = Color.Lerp(l.color, c, Time.deltaTime * 2);
+        l.intensity = Mathf.Lerp(l.intensity, i, Time.deltaTime * 2);
+    }
+}
+🔗 STEP 4: Attach Script
+Select Point Light
+In Inspector:
+Add Component → LightController
+⚠️ STEP 5: Fix Input System (IMPORTANT)
+
+Go to:
+
+Edit → Project Settings → Player
+
+Set:
+
+Active Input Handling → Both
+
+👉 Restart Unity
