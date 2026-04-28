@@ -410,3 +410,14 @@ navigator.geolocation.getCurrentPosition(p=>{
 </a-scene>
 </body>
 </html>
+# sever.js
+// server.js
+const express = require('express');
+const app = express();
+
+// serve all files in current folder
+app.use(express.static(__dirname));
+
+app.listen(3000, () => {
+  console.log("Server running at http://localhost:3000");
+});
