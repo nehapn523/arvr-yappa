@@ -456,3 +456,297 @@ Record:
 Avg / Min / Max response time
 Data center processing time
 
+#mapreduce using eclipse
+💻 🐘 WORD COUNT USING ECLIPSE (HADOOP)
+🎯 AIM
+
+To implement Word Count using Hadoop MapReduce in Eclipse.
+
+⚙️ STEP-BY-STEP PROCEDURE
+🔹 STEP 1: Open Eclipse
+Launch Eclipse IDE
+Select workspace
+🔹 STEP 2: Create New Java Project
+
+👉 Go to:
+
+File → New → Java Project
+
+Give name:
+
+WordCount
+
+Click Finish
+
+🔹 STEP 3: Add Hadoop Libraries ⚠️ (VERY IMPORTANT)
+
+👉 Right click project → Properties → Java Build Path → Libraries
+
+👉 Click:
+
+Add External JARs
+
+👉 Add ALL jars from:
+
+$HADOOP_HOME/share/hadoop/common
+$HADOOP_HOME/share/hadoop/mapreduce
+$HADOOP_HOME/share/hadoop/hdfs
+
+👉 Click Apply → OK
+
+🔹 STEP 4: Create Package
+
+Right click src → New → Package
+
+wc
+🔹 STEP 5: Create 3 Java Classes
+
+Inside package wc, create:
+
+WCDriver
+WCMapper
+WCReducer
+🔹 STEP 6: Paste Code
+
+👉 Use the clean code I gave earlier (Driver, Mapper, Reducer)
+
+🔹 STEP 7: Export as JAR
+
+👉 Right click project → Export
+
+Select Java → JAR file
+Choose destination:
+wc.jar
+Click Finish
+🐧 ⚙️ RUN IN HADOOP (Terminal)
+🔹 STEP 8: Create Input File
+echo "hello world hello neha" > input.txt
+🔹 STEP 9: Put in HDFS
+hdfs dfs -mkdir /input
+hdfs dfs -put input.txt /input
+🔹 STEP 10: Run Program
+hadoop jar wc.jar wc.WCDriver /input /output
+🔹 STEP 11: View Output
+hdfs dfs -cat /output/part-00000
+✅ OUTPUT
+hello   2
+world   1
+neha    1
+import java.io.IOException;
+import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapred.*;
+import org.apache.hadoop.util.*;
+
+public class WCDriver extends Configured implements Tool {
+
+    public int run(String args[]) throws IOException {
+
+        if (args.length < 2) {
+            System.out.println("Please give valid input and output paths");
+            return -1;
+        }
+
+        JobConf conf = new JobConf(WCDriver.class);
+        conf.setJobName("Word Count");
+
+        FileInputFormat.setInputPaths(conf, new Path(args[0]));
+        FileOutputFormat.setOutputPath(conf, new Path(args[1]));
+
+        conf.setMapperClass(WCMapper.class);
+        conf.setReducerClass(WCReducer.class);
+
+        conf.setOutputKeyClass(Text.class);
+        conf.setOutputValueClass(IntWritable.class);
+
+        JobClient.runJob(conf);
+        return 0;
+    }
+
+    public static void main(String args[]) throws Exception {
+        int res = ToolRunner.run(new WCDriver(), args);
+        System.exit(res);
+    }
+}
+
+import java.io.IOException;
+import org.apache.hadoop.io.*;
+import org.apache.hadoop.mapred.*;
+
+public class WCMapper extends MapReduceBase 
+implements Mapper<LongWritable, Text, Text, IntWritable> {
+
+    public void map(LongWritable key, Text value,
+                    OutputCollector<Text, IntWritable> output,
+                    Reporter reporter) throws IOException {
+
+        String line = value.toString();
+
+        for (String word : line.split(" ")) {
+            if (word.length() > 0) {
+                output.collect(new Text(word), new IntWritable(1));
+            }
+        }
+    }
+}
+
+import java.io.IOException;
+import java.util.Iterator;
+import org.apache.hadoop.io.*;
+import org.apache.hadoop.mapred.*;
+
+public class WCReducer extends MapReduceBase 
+implements Reducer<Text, IntWritable, Text, IntWritable> {
+
+    public void reduce(Text key, Iterator<IntWritable> values,
+                       OutputCollector<Text, IntWritable> output,
+                       Reporter reporter) throws IOException {
+
+        int sum = 0;
+
+        while (values.hasNext()) {
+            sum += values.next().get();
+        }
+
+        output.collect(key, new IntWritable(sum));
+    }
+}
+
+🐘 EXPERIMENT 7 – HDFS FILE MANAGEMENT
+🎯 AIM
+
+To perform file management operations in Hadoop using HDFS commands:
+
+Adding files
+Retrieving files
+Deleting files
+⚙️ PRE-STEP (VERY IMPORTANT)
+
+Start Hadoop first:
+
+start-dfs.sh
+start-yarn.sh
+💻 ✅ STEP-BY-STEP PROCEDURE
+🔹 Step 1: Create Directory in HDFS
+hdfs dfs -mkdir /user
+hdfs dfs -mkdir /user/neha
+
+👉 Or multiple:
+
+hdfs dfs -mkdir /user/neha/dir1 /user/neha/dir2
+🔹 Step 2: List Directory Contents
+hdfs dfs -ls /user/neha
+
+👉 Output shows folders/files
+
+🔹 Step 3: Upload File to HDFS (PUT)
+
+First create a file:
+
+echo "Hello Hadoop" > sample.txt
+
+Upload:
+
+hdfs dfs -put sample.txt /user/neha/
+🔹 Step 4: View File Content (CAT)
+hdfs dfs -cat /user/neha/sample.txt
+🔹 Step 5: Download File from HDFS (GET)
+hdfs dfs -get /user/neha/sample.txt /home/
+
+👉 File comes back to local system
+
+🔹 Step 6: Delete File from HDFS
+hdfs dfs -rm /user/neha/sample.txt
+🔹 Step 7: Display Last Lines (TAIL)
+hdfs dfs -tail /user/neha/sample.txt
+
+#Lab 8 colab
+Creation of Data Frames using Create Data Frame working with an example related to FIFA dataset.
+Dataset: https://drive.google.com/file/d/19f46bidHi8pSno6QcS2TxIQ8ol_tLg-r/view?usp=sharing 
+# Import necessary libraries
+from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType, FloatType
+
+# Initialize SparkSession
+spark = SparkSession.builder \
+    .appName("FIFADataFrameExample") \
+    .getOrCreate()
+
+# Define the schema for the FIFA dataset
+schema = StructType([
+    StructField("team", StringType(), True),
+    StructField("team_code", StringType(), True),
+    StructField("association", StringType(), True),
+    StructField("rank", IntegerType(), True),
+    StructField("previous_rank", IntegerType(), True),
+    StructField("points", FloatType(), True),
+    StructField("previous_points", FloatType(), True)
+])
+
+# Load FIFA dataset from CSV
+file_path = "/content/fifa_ranking_2022-10-06.csv" 
+fifa_df = spark.read.csv("/content/fifa_ranking_2022-10-06.csv", header=True, schema=schema)
+
+# Show DataFrame
+fifa_df.show();
+
+# Select and show specific columns
+fifa_df.select("previous_points").show()
+
+# Stop SparkSession
+spark.stop()
+
++-----------+---------+-----------+----+-------------+-------+---------------+
+|       team|team_code|association|rank|previous_rank| points|previous_points|
++-----------+---------+-----------+----+-------------+-------+---------------+
+|     Brazil|      BRA|   CONMEBOL|   1|            1| 1841.3|        1837.56|
+|    Belgium|      BEL|       UEFA|   2|            2|1816.71|        1821.92|
+|  Argentina|      ARG|   CONMEBOL|   3|            3|1773.88|        1770.65|
+|     France|      FRA|       UEFA|   4|            4|1759.78|        1764.85|
+|    England|      ENG|       UEFA|   5|            5|1728.47|        1737.46|
+|      Italy|      ITA|       UEFA|   6|            7|1726.14|        1713.86|
+|      Spain|      ESP|       UEFA|   7|            6|1715.22|        1716.93|
+|Netherlands|      NED|       UEFA|   8|            8|1694.51|        1679.41|
+|   Portugal|      POR|       UEFA|   9|            9|1676.56|        1678.65|
+|    Denmark|      DEN|       UEFA|  10|           10|1666.57|        1665.47|
+|    Germany|      GER|       UEFA|  11|           11|1650.21|        1658.96|
+|    Croatia|      CRO|       UEFA|  12|           15|1645.64|        1632.15|
+|     Mexico|      MEX|   CONCACAF|  13|           12|1644.89|        1649.57|
+|    Uruguay|      URU|   CONMEBOL|  14|           13|1638.71|        1640.95|
+|Switzerland|      SUI|       UEFA|  15|           16|1635.92|        1621.43|
+|        USA|      USA|   CONCACAF|  16|           14|1627.48|        1635.01|
+|   Colombia|      COL|   CONMEBOL|  17|           17|1611.04|        1604.07|
+|    Senegal|      SEN|        CAF|  18|           18|1584.38|        1584.59|
+|      Wales|      WAL|       UEFA|  19|           19|1569.82|        1582.13|
+|    IR Iran|      IRN|        AFC|  20|           22|1564.61|        1558.64|
++-----------+---------+-----------+----+-------------+-------+---------------+
+only showing top 20 rows
+
++---------------+
+|previous_points|
++---------------+
+|        1837.56|
+|        1821.92|
+|        1770.65|
+|        1764.85|
+|        1737.46|
+|        1713.86|
+|        1716.93|
+|        1679.41|
+|        1678.65|
+|        1665.47|
+|        1658.96|
+|        1632.15|
+|        1649.57|
+|        1640.95|
+|        1621.43|
+|        1635.01|
+|        1604.07|
+|        1584.59|
+|        1582.13|
+|        1558.64|
++---------------+
+only showing top 20 rows
+
