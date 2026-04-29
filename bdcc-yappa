@@ -378,3 +378,81 @@ gcc cpu.c -o cpu
 ./cpu
 ✅ OUTPUT (Example)
 CPU Usage: 11.34%
+ #cloud analyst
+☁️ EXPERIMENT 10 – CLOUD ANALYST
+🎯 Aim
+
+To analyze average, minimum, maximum response time and data center processing time using Cloud Analyst.
+
+⚙️ PROCEDURE
+🔹 Step 1: Download and Extract
+Download CloudAnalyst.zip
+Extract the folder
+🔹 Step 2: Run the Application
+
+👉 On Windows:
+
+Double click run.bat
+
+👉 If not working:
+
+java -cp jars/simjava2.jar;jars/gridsim.jar;jars/iText-2.1.5.jar;classes;. cloudsim.ext.gui.GuiMain
+
+👉 GUI window will open
+
+🔹 Step 3: Open Simulation Panel
+Click “Configure Simulation”
+🧪 CASE (i)
+
+👉 6 User Bases + 1 Data Center (50 VMs)
+
+🔹 Step 4: Add User Bases
+In User Bases section
+Click Add
+Add 6 User Bases
+
+👉 For each:
+
+Requests/User/Hour → 100
+Data Size → 1000
+Peak Hours → (any valid range, e.g., 9–18)
+🔹 Step 5: Configure Data Center
+Go to Data Center Configuration
+Click DC1
+
+Set:
+
+VM Count = 50
+Memory = 1024 MB
+Processor Speed = 100 MIPS
+🔹 Step 6: Save Configuration
+Click Save
+Name it (e.g., case1)
+🔹 Step 7: Run Simulation
+Click Run Simulation
+Wait for results window
+🔹 Step 8: Note Results
+
+Record:
+
+Average Response Time
+Minimum Response Time
+Maximum Response Time
+Data Center Processing Time
+Observe graphs
+🧪 CASE (ii)
+
+👉 4 User Bases + 1 Data Center (25 VMs)
+
+🔹 Step 9: Modify Configuration
+Change User Bases → 4
+Change VM Count → 25
+🔹 Step 10: Run Simulation Again
+Click Run Simulation
+🔹 Step 11: Note Results
+
+Record:
+
+Avg / Min / Max response time
+Data center processing time
+
