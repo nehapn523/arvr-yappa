@@ -1,0 +1,144 @@
+#Lab 6 count words mapreduc
+STEP 0: Update Ubuntu
+Open terminal:
+bash
+sudo apt update
+sudo apt upgrade -y
+STEP 1: Install Python (if not installed)
+Check first:
+bash
+python3 --version
+If NOT installed:
+bash
+sudo apt install python3 -y
+sudo apt install python3-pip -y
+Verify:
+bash
+python3 --version
+pip3 --version
+STEP 2: Install Java (Hadoop needs it)
+Check:
+bash
+java -version
+If NOT installed:
+bash
+sudo apt install openjdk-8-jdk -y
+Set JAVA_HOME:
+bash
+nano ~/.bashrc
+Add this at bottom:
+bash
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export PATH=$PATH:$JAVA_HOME/bin
+Apply:
+bash
+source ~/.bashrc
+STEP 3: Check Hadoop Installation
+Check:
+hadoop version
+👉 If not installed, follow your lab manual steps (you already have it) 
+STEP 4: Start Hadoop
+bash
+start-dfs.sh
+start-yarn.sh
+Check:
+bash
+jps
+You should see:
+NameNode
+DataNode
+ResourceManager
+NodeManager
+STEP 5: Create Project Folder
+mkdir wordcount
+cd wordcount
+STEP 6: Create Input File
+nano input.txt
+Paste:
+hello world hello neha
+hello ai world
+Save: `Ctrl + X → Y → Enter
+STEP 7: Create Mapper
+nano mapper.py
+Paste:
+#!/usr/bin/env python3
+import sys
+
+for line in sys.stdin:
+    words = line.strip().split()
+    for word in words:
+        print(f"{word}\t1")
+
+# 🧾 🔹 STEP 8: Create Reducer
+nano reducer.py
+Paste:
+#!/usr/bin/env python3
+import sys
+
+current_word = None
+current_count = 0
+
+for line in sys.stdin:
+    word, count = line.strip().split("\t")
+    count = int(count)
+
+    if current_word == word:
+        current_count += count
+    else:
+        if current_word:
+            print(f"{current_word}\t{current_count}")
+        current_word = word
+        current_count = count
+
+if current_word:
+    print(f"{current_word}\t{current_count}")
+```
+STEP 9: Give Permissions
+chmod +x mapper.py reducer.py
+
+STEP 10: Put File in HDFS
+
+bash
+hdfs dfs -mkdir /input
+hdfs dfs -put input.txt /input
+
+STEP 11: Run MapReduce
+hadoop jar $HADOOP_HOME/share/hadoop/tools/lib/hadoop-streaming*.jar \
+-input /input/input.txt \
+-output /output \
+-mapper mapper.py \
+-reducer reducer.py
+
+STEP 12: View Output
+hdfs dfs -cat /output/part-00000
+
+Expected:
+ai      1
+hello   3
+neha    1
+world   2
+STEP 13: Run Again (IMPORTANT)
+
+Before running again:
+
+hdfs dfs -rm -r /output
+
+COMMON ERRORS + FIX
+
+❌ python not found
+
+sudo apt install python3 -y
+
+❌ Permission denied
+
+chmod +x mapper.py reducer.py
+
+ ❌ Output exists
+
+hdfs dfs -rm -r /output
+❌ Hadoop not running
+
+bash
+start-dfs.sh
+start-yarn.sh
+
