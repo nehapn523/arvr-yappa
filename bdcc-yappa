@@ -749,4 +749,22 @@ only showing top 20 rows
 |        1558.64|
 +---------------+
 only showing top 20 rows
+ #lab 2
+#include <stdio.h>
 
+int main() {
+    char data[100];
+    FILE *f;
+
+    f = fopen("cloud.txt", "w");
+
+    printf("Enter text: ");
+    fgets(data, 100, stdin);
+
+    fprintf(f, "%s", data);
+
+    fclose(f);
+
+    printf("Saved!\n");
+    return 0;
+}
