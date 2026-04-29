@@ -142,3 +142,182 @@ bash
 start-dfs.sh
 start-yarn.sh
 
+#lab 5 hadoop single node install whatever
+PREREQUISITE TEST
+
+```bash
+sudo apt update
+sudo apt install openjdk-8-jdk -y
+java -version
+javac -version
+
+sudo apt install openssh-server openssh-client -y
+sudo adduser hdoop
+
+Switch user:
+```bash
+su - hdoop
+
+SSH SETUP (Passwordless Login)**
+```bash
+ssh-keygen -t rsa -P "" -f ~/.ssh/id_rsa
+
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+
+ssh localhost
+
+✅ If it logs in without password → correct
+DOWNLOAD HADOOP
+```bash
+wget https://downloads.apache.org/hadoop/common/hadoop-3.2.3/hadoop-3.2.3.tar.gz
+tar -xvzf hadoop-3.2.3.tar.gz
+
+EDITING 6 IMPORTANT FILES
+
+1. .bashrc**
+```bash
+nano ~/.bashrc
+
+Add:
+```bash
+# Hadoop Environment Variables
+export HADOOP_HOME=/home/hdoop/hadoop-3.2.3
+export HADOOP_INSTALL=$HADOOP_HOME
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+
+Apply:
+
+```bash
+source ~/.bashrc
+
+2. hadoop-env.sh**
+```bash
+nano $HADOOP_HOME/etc/hadoop/hadoop-env.sh
+
+Add:
+```bash
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+
+3. core-site.xml**
+```bash
+nano $HADOOP_HOME/etc/hadoop/core-site.xml
+
+Paste:
+```xml
+<configuration>
+<property>
+<name>hadoop.tmp.dir</name>
+<value>/home/hdoop/tmpdata</value>
+</property>
+
+<property>
+<name>fs.defaultFS</name>
+<value>hdfs://localhost:9000</value>
+</property>
+</configuration>
+
+4. hdfs-site.xml**
+```bash
+nano $HADOOP_HOME/etc/hadoop/hdfs-site.xml
+
+Paste:
+```xml
+<configuration>
+<property>
+<name>dfs.name.dir</name>
+<value>/home/hdoop/dfsdata/namenode</value>
+</property>
+
+<property>
+<name>dfs.data.dir</name>
+<value>/home/hdoop/dfsdata/datanode</value>
+</property>
+
+<property>
+<name>dfs.replication</name>
+<value>1</value>
+</property>
+</configuration>
+
+5. mapred-site.xml**
+``bash
+cp $HADOOP_HOME/etc/hadoop/mapred-site.xml.template \
+$HADOOP_HOME/etc/hadoop/mapred-site.xml
+
+nano $HADOOP_HOME/etc/hadoop/mapred-site.xml
+
+Paste:
+```xml
+<configuration>
+<property>
+<name>mapreduce.framework.name</name>
+<value>yarn</value>
+</property>
+</configuration>
+
+6. yarn-site.xml**
+```bash
+nano $HADOOP_HOME/etc/hadoop/yarn-site.xml
+```
+Paste:
+```xml
+<configuration>
+
+<property>
+<name>yarn.nodemanager.aux-services</name>
+<value>mapreduce_shuffle</value>
+</property>
+
+<property>
+<name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
+<value>org.apache.hadoop.mapred.ShuffleHandler</value>
+</property>
+
+<property>
+<name>yarn.resourcemanager.hostname</name>
+<value>127.0.0.1</value>
+</property>
+
+<property>
+<name>yarn.acl.enable</name>
+<value>0</value>
+</property>
+
+<property>
+<name>yarn.nodemanager.env-whitelist</name>
+<value>JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME</value>
+</property>
+
+</configuration>
+
+CREATE REQUIRED DIRECTORIES
+```bash
+mkdir -p ~/tmpdata
+mkdir -p ~/dfsdata/namenode
+mkdir -p ~/dfsdata/datanode
+
+LAUNCHING HADOOP
+```bash
+hdfs namenode -format
+start-dfs.sh
+start-yarn.sh
+
+CHECK SERVICES
+```bash
+jps
+```
+
+```bash
+NameNode
+DataNode
+SecondaryNameNode
+ResourceManager
+NodeManager
+
