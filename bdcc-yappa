@@ -321,3 +321,60 @@ SecondaryNameNode
 ResourceManager
 NodeManager
 
+#Lab 3 time
+🐧 ✅ FULL STEPS: CPU USAGE PROGRAM (C)
+🔹 STEP 1: Open Terminal
+
+Press:
+
+Ctrl + Alt + T
+🔹 STEP 2: Create File
+nano cpu.c
+
+👉 Paste this code:
+
+#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+    long a[4], b[4];
+    FILE *f;
+
+    f = fopen("/proc/stat", "r");
+    fscanf(f, "%*s %ld %ld %ld %ld", &a[0], &a[1], &a[2], &a[3]);
+    fclose(f);
+
+    sleep(1);
+
+    f = fopen("/proc/stat", "r");
+    fscanf(f, "%*s %ld %ld %ld %ld", &b[0], &b[1], &b[2], &b[3]);
+    fclose(f);
+
+    float cpu = ((b[0]+b[1]+b[2]) - (a[0]+a[1]+a[2])) * 100.0 /
+                ((b[0]+b[1]+b[2]+b[3]) - (a[0]+a[1]+a[1]+a[3]));
+
+    printf("CPU Usage: %.2f%%\n", cpu);
+
+    return 0;
+}
+
+👉 Save:
+
+Ctrl + X
+Press Y
+Press Enter
+🔹 STEP 3: Install Compiler (if needed)
+
+Check:
+
+gcc --version
+
+👉 If not installed:
+
+sudo apt install build-essential -y
+🔹 STEP 4: Compile Program
+gcc cpu.c -o cpu
+🔹 STEP 5: Run Program
+./cpu
+✅ OUTPUT (Example)
+CPU Usage: 11.34%
