@@ -768,3 +768,34 @@ int main() {
     printf("Saved!\n");
     return 0;
 }
+
+#lab 3 cpu time 
+#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+    long a[4], b[4];
+    FILE *f;
+
+    f = fopen("/proc/stat", "r");
+    fscanf(f, "%*s %ld %ld %ld %ld", &a[0], &a[1], &a[2], &a[3]);
+    fclose(f);
+
+    sleep(1);
+
+    f = fopen("/proc/stat", "r");
+    fscanf(f, "%*s %ld %ld %ld %ld", &b[0], &b[1], &b[2], &b[3]);
+    fclose(f);
+
+    float cpu = ((b[0]+b[1]+b[2]) - (a[0]+a[1]+a[2])) * 100.0 /
+                ((b[0]+b[1]+b[2]+b[3]) - (a[0]+a[1]+a[1]+a[3]));
+
+    printf("CPU Usage: %.2f%%\n", cpu);
+
+    return 0;
+}
+gcc --version
+if not 
+sudo apt install build-essential -y
+gcc cpu.c -o cpu
+./cpu
