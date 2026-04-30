@@ -917,3 +917,5 @@ hdfs dfs -put input.txt /input
 hadoop jar wc.jar wc.WCDriver /input /output
 🔹 STEP 10: View Output
 hdfs dfs -cat /output/part-00000
+
+https://github.com/naniwoitteirunoka-wakaranai/cloud
