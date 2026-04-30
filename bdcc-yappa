@@ -799,3 +799,23 @@ if not
 sudo apt install build-essential -y
 gcc cpu.c -o cpu
 ./cpu
+
+#Lab 1
+#include <stdio.h>
+
+int main() {
+    char data[100];
+    FILE *f;
+
+    f = fopen("cloud.txt", "w");
+
+    printf("Enter text: ");
+    fgets(data, 100, stdin);
+
+    fprintf(f, "%s", data);
+
+    fclose(f);
+
+    printf("Saved!\n");
+    return 0;
+}
