@@ -819,3 +819,101 @@ int main() {
     printf("Saved!\n");
     return 0;
 }
+
+#Map reduce steps
+💻 ✅ WHAT TO DO IN ECLIPSE (STEP-BY-STEP)
+🔹 STEP 1: Open Eclipse
+Launch Eclipse
+Select workspace (any folder)
+🔹 STEP 2: Create Java Project
+
+👉 Go to:
+
+File → New → Java Project
+
+Name:
+
+WordCount
+
+Click Finish
+
+🔹 STEP 3: Create Package
+
+Right click src → New → Package
+
+Name:
+
+wc
+🔹 STEP 4: Create 3 Classes
+
+Inside package wc, create:
+
+WCDriver
+WCMapper
+WCReducer
+🔹 STEP 5: FIX RED IMPORTS (MOST IMPORTANT ⚠️)
+
+👉 Right click project → Properties → Java Build Path → Libraries
+
+Click:
+
+Add External JARs
+
+Now go to your Hadoop folder:
+
+/home/yourname/hadoop/share/hadoop/
+📦 Add ALL jars from:
+common/
+common/lib/
+hdfs/
+hdfs/lib/
+mapreduce/
+yarn/
+yarn/lib/
+
+👉 Select all .jar files → Open
+👉 Click Apply → OK
+
+🔹 STEP 6: Paste Code
+
+Paste the clean code I gave earlier into:
+
+WCDriver
+WCMapper
+WCReducer
+🔹 STEP 7: Fix Errors (if any)
+
+Do this:
+
+👉 Project → Clean
+👉 Save all files
+👉 Restart Eclipse (if needed)
+
+🔹 STEP 8: Export JAR
+
+👉 Right click project → Export
+
+Choose:
+
+Java → JAR file
+
+Next →
+
+Select:
+
+WordCount project
+
+Give name:
+
+wc.jar
+
+Click Finish
+
+🐧 RUN IN TERMINAL (AFTER ECLIPSE)
+🔹 STEP 9: Run Hadoop Job
+hdfs dfs -mkdir /input
+hdfs dfs -put input.txt /input
+
+hadoop jar wc.jar wc.WCDriver /input /output
+🔹 STEP 10: View Output
+hdfs dfs -cat /output/part-00000
